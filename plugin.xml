@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension id="org.eclipse.dltk.rst2eclipse.id1" point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run class="org.eclipse.dltk.rst2eclipse.core.RstNature"></run>
+      </runtime>
+   </extension>
+   <extension point="org.eclipse.core.contenttype.contentTypes">
+    <content-type name="ReStructuredText Content Type"
+            base-type="org.eclipse.core.runtime.text"
+            describer="org.eclipse.dltk.rst2eclipse.core.RstContentDescriber"
+            file-extensions="rst"
+            id="org.eclipse.dltk.rst2eclipse.content-type"
+            priority="high">
+      </content-type>
+         
+   </extension>
+   <extension
+         point="org.eclipse.dltk.core.language">
+      <language
+            class="org.eclipse.dltk.rst2eclipse.core.RstLanguageToolKit"
+            nature="org.eclipse.dltk.rst2eclipse.nature"
+            priority="0">
+      </language>
+   </extension>
+   <extension point="org.eclipse.dltk.ui.language">
+        <language
+            class="org.eclipse.dltk.rst2eclipse.ui.RstLanguageUIToolKit"
+            nature="org.eclipse.dltk.rst2eclipse.nature"
+            priority="0">
+      </language>
+   </extension>
+   <extension
+         point="org.eclipse.dltk.core.sourceElementParsers">
+      <parser
+            class="org.eclipse.dltk.rst2eclipse.core.RstSourceElementParser"
+            nature="org.eclipse.dltk.rst2eclipse.nature"
+            priority="0">
+      </parser>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="org.eclipse.dltk.rst2eclipse.category"
+            class="org.eclipse.dltk.ui.wizards.GenericDLTKProjectWizard:org.eclipse.dltk.examples.python.nature"
+            icon="icons/python_icon.png"
+            id="org.eclipse.dltk.rst2eclipse.wizard1"
+            name="ReStructuredText Project"
+            project="true">
+      </wizard>
+      <category
+            id="org.eclipse.dltk.rst2eclipse.category"
+            name="ReStructuredText">
+      </category>
+   </extension>
+   <extension
+         point="org.eclipse.dltk.core.sourceParsers">
+      <parserContribution
+            natureId="org.eclipse.dltk.rst2eclipse.nature">
+         <parser
+               class="org.eclipse.dltk.rst2eclipse.core.RstSourceParserFactory"
+               description="ReStructuredText Parser"
+               id="org.eclipse.dltk.rst2eclipse.sourceParser"
+               name="sourceParser.name"
+               priority="0">
+         </parser>
+      </parserContribution>
+   </extension>
+
+</plugin>
