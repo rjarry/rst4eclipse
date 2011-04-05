@@ -1,4 +1,4 @@
-package org.eclipse.dltk.rst2eclipse.core;
+package org.diabeteman.rst4eclipse.core;
 
 import java.util.regex.Pattern;
 

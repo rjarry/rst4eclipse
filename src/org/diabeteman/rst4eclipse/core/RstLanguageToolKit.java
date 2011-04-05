@@ -1,4 +1,4 @@
-package org.eclipse.dltk.rst2eclipse.core;
+package org.diabeteman.rst4eclipse.core;
 
 import org.eclipse.dltk.core.AbstractLanguageToolkit;
 import org.eclipse.dltk.core.IDLTKLanguageToolkit;
@@ -19,7 +19,7 @@ public class RstLanguageToolKit extends AbstractLanguageToolkit {
 	
 	@Override
 	public String getLanguageContentType() {
-		return "org.eclipse.dltk.rst2eclipse.content-type";
+		return "org.diabeteman.rst4eclipse.content-type";
 	}
 
 	@Override

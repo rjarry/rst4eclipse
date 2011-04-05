@@ -1,4 +1,4 @@
-package org.eclipse.dltk.rst2eclipse;
+package org.diabeteman.rst4eclipse;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -7,18 +7,8 @@ import org.osgi.framework.BundleContext;
  * The activator class controls the plug-in life cycle
  */
 public class RstActivator extends AbstractUIPlugin {
-
-	// The plug-in ID
-	public static final String PLUGIN_ID = "org.eclipse.dltk.rst2eclipse";
-
 	// The shared instance
 	private static RstActivator plugin;
-	
-	/**
-	 * The constructor
-	 */
-	public RstActivator() {
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -45,6 +35,10 @@ public class RstActivator extends AbstractUIPlugin {
 	 */
 	public static RstActivator getDefault() {
 		return plugin;
+	}
+	
+	public static String getId() {
+		return getDefault().getBundle().getSymbolicName();
 	}
 
 }

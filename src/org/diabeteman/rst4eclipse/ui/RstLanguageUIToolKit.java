@@ -1,8 +1,8 @@
-package org.eclipse.dltk.rst2eclipse.ui;
+package org.diabeteman.rst4eclipse.ui;
 
+import org.diabeteman.rst4eclipse.RstActivator;
+import org.diabeteman.rst4eclipse.core.RstLanguageToolKit;
 import org.eclipse.dltk.core.IDLTKLanguageToolkit;
-import org.eclipse.dltk.rst2eclipse.RstActivator;
-import org.eclipse.dltk.rst2eclipse.core.RstLanguageToolKit;
 import org.eclipse.dltk.ui.AbstractDLTKUILanguageToolkit;
 import org.eclipse.jface.preference.IPreferenceStore;
 
