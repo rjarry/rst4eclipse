@@ -19,14 +19,14 @@
    <extension
          point="org.eclipse.dltk.core.language">
       <language
-            class="org.eclipse.dltk.rst2eclipse.core.RstLanguageToolKit"
+            class="org.eclipse.rst4eclipse.core.RstLanguageToolKit"
             nature="org.eclipse.dltk.rst2eclipse.nature"
             priority="0">
       </language>
    </extension>
    <extension point="org.eclipse.dltk.ui.language">
         <language
-            class="org.eclipse.dltk.rst2eclipse.ui.RstLanguageUIToolKit"
+            class="org.eclipse.rst4eclipse.ui.RstLanguageUIToolKit"
             nature="org.eclipse.dltk.rst2eclipse.nature"
             priority="0">
       </language>
@@ -34,7 +34,7 @@
    <extension
          point="org.eclipse.dltk.core.sourceElementParsers">
       <parser
-            class="org.eclipse.dltk.rst2eclipse.core.RstSourceElementParser"
+            class="org.eclipse.rst4eclipse.core.RstSourceElementParser"
             nature="org.eclipse.dltk.rst2eclipse.nature"
             priority="0">
       </parser>
@@ -59,7 +59,7 @@
       <parserContribution
             natureId="org.eclipse.dltk.rst2eclipse.nature">
          <parser
-               class="org.eclipse.dltk.rst2eclipse.core.RstSourceParserFactory"
+               class="org.eclipse.rst4eclipse.core.RstSourceElementParser"
                description="ReStructuredText Parser"
                id="org.eclipse.dltk.rst2eclipse.sourceParser"
                name="sourceParser.name"

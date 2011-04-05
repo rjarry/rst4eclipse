@@ -1,4 +1,4 @@
-package org.eclipse.dltk.rst2eclipse;
+package org.eclipse.rst4eclipse;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;

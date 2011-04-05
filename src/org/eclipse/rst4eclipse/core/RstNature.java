@@ -1,7 +1,7 @@
-package org.eclipse.dltk.rst2eclipse.core;
+package org.eclipse.rst4eclipse.core;
 
 import org.eclipse.dltk.core.ScriptNature;
-import org.eclipse.dltk.rst2eclipse.RstActivator;
+import org.eclipse.rst4eclipse.RstActivator;
 
 public class RstNature extends ScriptNature {
 	

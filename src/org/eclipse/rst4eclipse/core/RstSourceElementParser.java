@@ -1,4 +1,4 @@
-package org.eclipse.dltk.rst2eclipse.core;
+package org.eclipse.rst4eclipse.core;
 
 import org.eclipse.dltk.core.AbstractSourceElementParser;
 
