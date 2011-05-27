@@ -31,14 +31,6 @@
       </language>
    </extension>
    <extension
-         point="org.eclipse.dltk.core.sourceElementParsers">
-      <parser
-            class="org.diabeteman.rst4eclipse.core.RstSourceElementParser"
-            nature="org.diabeteman.rst4eclipse.nature"
-            priority="0">
-      </parser>
-   </extension>
-   <extension
          point="org.eclipse.ui.newWizards">
       <wizard
             category="org.diabeteman.rst4eclipse.category"
@@ -58,13 +50,19 @@
       <parserContribution
             natureId="org.diabeteman.rst4eclipse.nature">
          <parser
-               class="org.diabeteman.rst4eclipse.core.RstSourceElementParser"
-               description="ReStructuredText Parser"
+               class="org.diabeteman.rst4eclipse.core.RstSourceParserFactory"
+               description="sourceParser.description"
                id="org.diabeteman.rst4eclipse.sourceParser"
                name="sourceParser.name"
-               priority="0">
-         </parser>
+               priority="0" />
       </parserContribution>
    </extension>
-
+   <extension
+         point="org.eclipse.dltk.core.sourceElementParsers">
+      <parser
+            class="org.diabeteman.rst4eclipse.core.RstSourceElementParser"
+            nature="org.diabeteman.rst4eclipse.nature"
+            priority="0">
+      </parser>
+   </extension>
 </plugin>

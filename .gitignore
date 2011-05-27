@@ -1,2 +1,5 @@
 
 /bin
+/src/org/diabeteman/rst4eclipse/core/parser/grammar/Rst.tokens
+/src/org/diabeteman/rst4eclipse/core/parser/grammar/RstLexer.java
+/src/org/diabeteman/rst4eclipse/core/parser/grammar/RstParser.java
