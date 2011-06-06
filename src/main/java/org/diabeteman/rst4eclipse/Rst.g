@@ -8,20 +8,21 @@ options {
 }
 
 tokens {
-  FILE;
-  SECTION;
-  TITLE;
-  PARAGRAPH;
-  INDENTATION;
-  LINE;
-  WORD;
-  BOLD;
-  ITALIC;
-  INTERPRETED_TEXT;
-  INLINE_LITERAL;
-  REFERENCE;
-  CLASS;
-  SUBSTITUTION_REFERENCE;
+  File;
+  Section;
+  Title;
+  Paragraph;
+  Indent;
+  Dedent;
+  Line;
+  Word;
+  Bold;
+  Italic;
+  InterpretedText;
+  InlineLitteral;
+  Reference;
+  Class;
+  SubstitutionReference;
 }
 
 @lexer::header {
@@ -36,173 +37,185 @@ package org.diabeteman.rst4eclipse;
  ****************/
 
 file
-  :  section+ EOF -> ^(FILE section+)
+  :  section+ EOF -> ^(File section+)
   ;
 
 section
-	:  sectionTitle sectionContent+ -> ^(SECTION sectionTitle sectionContent+)
-  |  Space* LineBreak -> /* omit line-breaks between paragraphs from AST */
+	:  section_title section_content+ -> ^(Section section_title section_content+)
+//  |  empty_line* -> /* omit line-breaks between paragraphs from AST */
 	;
 
-sectionTitle
-	:  line underline -> ^(TITLE line)
+section_title
+	: line underline[$line.length] 
+	 {System.out.println("Matched Title: '" + $line.content + "' length: " + $line.length);}
+	         -> ^(Title line)
 	;
 
-sectionContent
-  :  paragraph
+section_content
+  :  underline[4]
+  |  paragraph
   |  section
-  |  Space* LineBreak -> /* omit line-breaks between paragraphs from AST */
+//  |  empty_line* -> /* omit line-breaks between paragraphs from AST */
   ;
 
-underline
-	:  (UnderScore|Star|Pipe|BackTick|Column|SpecialChar)+ LineBreak
-	;
+underline[int minLength] returns [char symbol]
+@init {
+$symbol = (char) 0;
+int length = 0;
+}
+  : first=underline_atom   {$symbol=$first.symbol; length++;}
+    (  next=underline_atom    {$symbol == $next.symbol}?    {length++;}   )+   
+    {length >= minLength}?
+    LINE_BREAK
+  ;
+
+underline_atom returns [char symbol]
+@init {
+$symbol = (char) 0;
+}
+  : (UNDERSCORE | STAR | PIPE | BACKTICK | COLUMN | SPECIAL_CHAR)
+    {$symbol = $text.charAt(0);}
+  ;
+
 
 paragraph
-  :  line+ LineBreak -> ^(PARAGRAPH line+)
+  :  line+ LINE_BREAK -> ^(Paragraph line+)
   ;
 
-line
-  :  indentation text+ LineBreak
+line returns [int length, String content]
+@init {
+$length = 0;
+$content = null;
+}
+  :  any_text+ 
+  {
+      $length = $text.length();
+      $content = $text;
+  } 
+    LINE_BREAK
   ;
 
-indentation
-  :  Space* -> ^(INDENTATION Space*)
-  ;
-
-text
-  :  styledText
+any_text
+  :  styled_text
   |  reference
-  |  Space
-  |  EscapeSequence
-  |  SimpleChar
-  |  Any
+  |  WS
+  |  ESCAPE_SEQUENCE
+  |  SIMPLE_CHAR
+  |  ANY
   ;
 
-styledText
+styled_text
   :  bold
   |  italic
-  |  inlineLiteral
-  |  interpretedText
+  |  inline_litteral
+  |  interpreted_text
   ;
 
 bold
-  :  Star Star noStarAtom+ Star Star -> ^(BOLD noStarAtom+)
+  :  STAR STAR no_star_atom+ STAR STAR -> ^(Bold no_star_atom+)
   ;  
 
 italic
-  :  Star noStarAtom+ Star -> ^(ITALIC noStarAtom+)
+  :  STAR no_star_atom+ STAR -> ^(Italic no_star_atom+)
   ;
 
-noStarAtom
-  :  ~(Star | LineBreak)
+no_star_atom
+  :  ~(STAR | LINE_BREAK)
   ;
 
-interpretedText
-  :  interpretedTextClass BackTick interpretedTextAtoms BackTick -> ^(INTERPRETED_TEXT interpretedTextClass interpretedTextAtoms)
-  |  BackTick interpretedTextAtoms BackTick interpretedTextClass -> ^(INTERPRETED_TEXT interpretedTextClass interpretedTextAtoms)
-  |  BackTick interpretedTextAtoms BackTick -> ^(INTERPRETED_TEXT interpretedTextAtoms)
+interpreted_text
+  :  interpreted_text_class BACKTICK interpreted_text_atoms BACKTICK 
+                -> ^(InterpretedText interpreted_text_class interpreted_text_atoms)
+  |  BACKTICK interpreted_text_atoms BACKTICK interpreted_text_class 
+                -> ^(InterpretedText interpreted_text_class interpreted_text_atoms)
+  |  BACKTICK interpreted_text_atoms BACKTICK 
+                -> ^(InterpretedText interpreted_text_atoms)
   ;
 
-interpretedTextAtoms
-  :  ~BackTick+
+interpreted_text_atoms
+  :  ~BACKTICK+
   ;
 
-interpretedTextClass
-  :  Column classAtom Column -> ^(CLASS classAtom)
+interpreted_text_class
+  :  COLUMN class_atom COLUMN -> ^(Class class_atom)
   ;
 
-classAtom
-  : SimpleChar+
+class_atom
+  : SIMPLE_CHAR+
   ;
 
-inlineLiteral
-  :  BackTick BackTick inlineLiteralAtoms BackTick BackTick -> ^(INLINE_LITERAL inlineLiteralAtoms)
+inline_litteral
+  :  BACKTICK BACKTICK inline_litteral_atoms BACKTICK BACKTICK 
+                -> ^(InlineLitteral inline_litteral_atoms)
   ;
 
-inlineLiteralAtoms
-  :  inlineLiteralAtom+
+inline_litteral_atoms
+  :  inline_litteral_atom+
   ;
 
-inlineLiteralAtom
-  :  ~BackTick
-  |  BackTick ~BackTick
+inline_litteral_atom
+  :  ~BACKTICK
+  |  BACKTICK ~BACKTICK
   ;
 
 reference
-  :  simpleReference
-  |  longReference
-  |  substitutionReference
+  :  simple_reference
+  |  long_reference
+  |  substitution_reference
   ;
 
-simpleReference
-  :  simpleReferenceAtoms UnderScore -> ^(REFERENCE simpleReferenceAtoms)
+simple_reference
+  :  simple_reference_atoms UNDERSCORE -> ^(Reference simple_reference_atoms)
   ;
 
-simpleReferenceAtoms
-  :  (SimpleChar|Any)+
+simple_reference_atoms
+  :  (SIMPLE_CHAR|ANY)+
   ;
 
-longReference
-  :  BackTick interpretedTextAtoms BackTick UnderScore -> ^(REFERENCE interpretedTextAtoms)
+long_reference
+  :  BACKTICK interpreted_text_atoms BACKTICK UNDERSCORE -> ^(Reference interpreted_text_atoms)
   ;
 
-substitutionReference
-	:  Pipe substitutionReferenceAtom+ Pipe -> ^(SUBSTITUTION_REFERENCE substitutionReferenceAtom+)
+substitution_reference
+	:  PIPE substitution_reference_atom+ PIPE -> ^(SubstitutionReference substitution_reference_atom+)
 	;
 
-substitutionReferenceAtom
-	:  ~Pipe
+substitution_reference_atom
+	:  ~PIPE
 	;
+
+//empty_line
+//  :  LEADING_WS? LINE_BREAK
+//  ;
 
 /***************
  * LEXER RULES *
  ***************/
 
 
-UnderScore
+
+UNDERSCORE
   :  '_'
   ;
 
-BackTick
+BACKTICK
   :  '`'
   ;
 
-Star
+STAR
   :  '*'
   ;
 
-Pipe
+PIPE
   :  '|'
   ;
 
-Column
+COLUMN
   :  ':'
   ;
 
-Space
-  :  ' ' 
-  |  '\t'
-  ;
-
-EscapeSequence
-  :  '\\' ('*' | '`' | '|')
-  ;
-
-LineBreak
-  :  '\r'? '\n'
-  |  '\r'
-  ;
-
-SimpleChar
-  :  '-'
-  |  '0'..'9'
-  |  'A'..'Z'
-  |  'a'..'z'
-  ;
-
-SpecialChar
-	:  (
+SPECIAL_CHAR
+  :  (
      '!'
     |'"'
     |'#'
@@ -212,13 +225,10 @@ SpecialChar
     |'\''
     |'('
     |')'
-
     |'+'
     |','
-
     |'.'
     |'/'
-
     |';'
     |'<'
     |'='
@@ -229,15 +239,53 @@ SpecialChar
     |'\\'
     |']'
     |'^'
-
-
     |'{'
-
     |'}'
     |'~'
     )
-	;
+  ;
 
-Any
+ESCAPE_SEQUENCE
+  :  '\\' ('*' | '`' | '|' | '\\')
+  ;
+
+
+SIMPLE_CHAR
+  :  '-'
+  |  '0'..'9'
+  |  'A'..'Z'
+  |  'a'..'z'
+  ;
+
+
+LINE_BREAK
+  :  '\r'? '\n'
+  ;
+
+
+WS
+  :  /*{getCharPositionInLine()>0}?=>*/ (' '|'\t'|'\u000C')+
+  ;
+
+//LEADING_WS
+//@init {
+//int spaces = 0;
+//}
+//    :   {getCharPositionInLine() == 0}?=>
+//        (
+//            (' ' {spaces++;}|'\u000C' {spaces++;}|'\t' {spaces += 8; spaces -= (spaces \% 8);})+
+//            {
+//                // make a string of n spaces where n is column number - 1
+//                char[] indentation = new char[spaces];
+//                for (int i=0; i<spaces; i++) {
+//                    indentation[i] = ' ';
+//                }
+//                String s = new String(indentation);
+//                emit(new ClassicToken(LEADING_WS, s));
+//            }
+//        )
+//    ;
+
+ANY
   :  .
   ;

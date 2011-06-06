@@ -1,11 +1,8 @@
 
 /bin
-/src/org/diabeteman/rst4eclipse/core/parser/grammar/Rst.tokens
-/src/org/diabeteman/rst4eclipse/core/parser/grammar/RstLexer.java
-/src/org/diabeteman/rst4eclipse/core/parser/grammar/RstParser.java
+/classes
+/src/main/java/org/diabeteman/rst4eclipse/output
 /src/main/java/org/diabeteman/rst4eclipse/Rst.tokens
 /src/main/java/org/diabeteman/rst4eclipse/RstLexer.java
 /src/main/java/org/diabeteman/rst4eclipse/RstParser.java
-/src/main/java/org/diabeteman/rst4eclipse/Rst.tokens
-/src/main/java/org/diabeteman/rst4eclipse/RstLexer.java
-/src/main/java/org/diabeteman/rst4eclipse/RstParser.java
+*.class

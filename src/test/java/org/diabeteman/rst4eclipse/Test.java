@@ -9,9 +9,6 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.Tree;
 
-import org.diabeteman.rst4eclipse.RstLexer;
-import org.diabeteman.rst4eclipse.RstParser;
-
 public class Test {
 
     public static void main(String[] args) throws RecognitionException, IOException {
